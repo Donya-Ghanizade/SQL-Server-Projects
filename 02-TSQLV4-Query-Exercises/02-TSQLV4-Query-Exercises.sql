@@ -1,7 +1,6 @@
 ﻿
 -- 1 
--- فروش هایی که در تاریخ June 2015 
--- قرار دارند نمایش دهد
+--  قرار دارند نمایش دهد (June 2015 )فروش هایی که در تاریخ 
 -- جداول مورد نیاز: TSQLV4 database, Sales.Orders table
 
 -- Desired output: --خروجی انتهایی
@@ -27,11 +26,7 @@ Where orderdate >= '2015-06-01'
 	And
 	orderdate < '2015-07-01'
 -------------------------------------------
--- 2 
-/*
-فروشهایی که در آخرین روز هر ماه قرار دارند نمایش دهد
-*/
-
+-- 2) فروشهایی که در آخرین روز هر ماه قرار دارند نمایش دهد
 -- جداول مورد نظر: Sales.Orders table
 
 -- Desired output:
@@ -57,14 +52,11 @@ From Sales.Orders
 Where orderdate = EOMONTH (orderdate)
 
 -------------------------------------------------
-
--- 3 
-/*
-مشتریانی را نمایش دهد که در فامیلیی آنها حرف e 
-دوبار یا بیشتر تکرار شده 
-*/
+-- 3
+/* 
+دو بار یا بیشتر تکرار شده (e) مشتریانی را نمایش دهد که در فامیلیی آنها حرف
 -- جداول مورد نیاز: HR.Employees table
-
+*/
 -- Desired output:
 empid       firstname  lastname
 ----------- ---------- --------------------
@@ -79,12 +71,11 @@ Where lastname Like N'%e%e%';
 -----------------------------------
 -- 4 
 /*
-فروشهایی با مقدار total (qty*Unitprice)
-بزرگتر از 10000 را نمایش دهد.
-و بر اساس total Value
-مرتب سازی شود
-*/
+total (qty*Unitprice)
+-- فروش هایی با مقدار بزرگتر از 10000 را تمایش دهد
+-- order by total value 
 -- جداول مورد نیاز: Sales.OrderDetails table
+*/
 
 -- Desired output:
 orderid     totalvalue
@@ -105,7 +96,10 @@ orderid     totalvalue
 10691       10164.80
 
 (14 row(s) affected)
---------------------------------answer
+-- =====================================================
+-- 04. Calculating Total Order Value
+-- Find orders with a total value greater than 10,000
+-- =====================================================
 Select orderid,
 	SUM(qty * unitprice) AS totalvalue
 From Sales.OrderDetails
@@ -116,8 +110,8 @@ Order By totalvalue desc
 
 -- 5
 /*
- بر روی جدول Hr.Employees
- کدی بنویسید که نام خانوادگی آنها با حروف کوچک شروع شده است . 
+ بر روی جدول مشخص شده کدی بنویسید ککه نام و نام خانوادگی آنها با حروف کوچک شروع شده است
+ table > Hr.Employees 
 */
 
 -- Desired output:
@@ -130,11 +124,15 @@ SELECT empid, lastname
 FROM HR.Employees
 WHERE ASCII(LEFT(lastname, 1)) BETWEEN ASCII('a') AND ASCII('z');
 -----------------------------------------------------
+
 -- 6
 /*
 تفاوت بین دو کد زیر را بیان کنید
 */
-
+-- =====================================================
+-- 06. WHERE vs HAVING
+-- Compare filtering rows before and after grouping
+-- =====================================================
 
 -- Query 1
 SELECT empid, COUNT(*) AS numorders
@@ -156,7 +154,7 @@ HAVING MAX(orderdate) < '20160501';
 --  و با دستور آخر فقط کارمندانی انتخاب میشوند که آخرین سفارش آنها قبل از تاریخ مشخص شده باشد
 -- Group by - Having - count
 -----------------------------------------------
--- 7 
+-- 7
 /*
 سه کشور با میزان بزرگترین میزان حمل و نقل در سال 2015 
 */
@@ -171,6 +169,11 @@ Sweden          105.16
 
 (3 row(s) affected)
 ----------------------------------answer
+-- =====================================================
+-- 07. Top 3 Countries by Average Freight
+-- Find the three countries with the highest average
+-- freight for orders placed in 2015
+-- =====================================================
 SELECT TOP (3)
        shipcountry,
        AVG(freight) AS avgfreight
@@ -204,6 +207,11 @@ empid       firstname  lastname             titleofcourtesy           gender
 
 (9 row(s) affected)
 --------------------------------------answer
+-- =====================================================
+-- 08. Inferring Gender from Title of Courtesy
+-- Classify employees based on their courtesy title
+-- =====================================================
+
 Select empid,firstname,lastname,titleofcourtesy,
 		CASE
 			WHEN titleofcourtesy IN ('Ms.', 'Mrs.') THEN 'Female'
@@ -250,6 +258,12 @@ custid      region
 
 (91 row(s) affected)
 ---------------------------answer
+-- =====================================================
+-- 09. Sorting Regions with NULL Values Last
+-- Return customer IDs and regions, with NULL regions
+-- placed at the end of the result
+-- =====================================================
+
 Select custid,region
 From Sales.customers
 Order by
