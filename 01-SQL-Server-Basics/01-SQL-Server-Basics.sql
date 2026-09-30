@@ -1,4 +1,27 @@
-﻿----------------------------1
+﻿/*
+=========================================================
+SQL Server Basics & Query Practice
+Database: AdventureWorks
+Tool: SQL Server Management Studio (SSMS)
+
+Topics:
+- SELECT
+- WHERE
+- ORDER BY
+- GROUP BY
+- HAVING
+- Aggregate Functions
+- CASE
+- TOP
+- OFFSET / FETCH
+- NULL Handling
+=========================================================
+*/
+
+Select ...
+
+
+----------------------------1
 Select *
 From Person.Address
 Where City='Seattle'
